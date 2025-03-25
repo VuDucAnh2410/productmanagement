@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +14,7 @@ public class CartActivity extends AppCompatActivity {
 
     private LinearLayout customerLayout, productLayout, cartLayout, orderLayout;
     private LinearLayout statisticsLayout;
+    private TextView statisticsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +27,10 @@ public class CartActivity extends AppCompatActivity {
         cartLayout = findViewById(R.id.cart_layout);
         orderLayout = findViewById(R.id.order_layout);
         statisticsLayout = findViewById(R.id.statistics_layout);
+        statisticsTextView = findViewById(R.id.textViewStatistics);
 
         // Thiết lập sự kiện click cho layout thống kê
-        statisticsLayout.setOnClickListener(new View.OnClickListener() {
+        statisticsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CartActivity.this, StatisticsActivity.class);
@@ -37,6 +40,11 @@ public class CartActivity extends AppCompatActivity {
 
         // Thiết lập sự kiện click cho các menu
         setupBottomNavigation();
+    }
+
+    private void openStatisticsActivity() {
+        Intent intent = new Intent(CartActivity.this, StatisticsActivity.class);
+        startActivity(intent);
     }
 
     private void setupBottomNavigation() {

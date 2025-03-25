@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/title_text_view">
 
         <TextView
+            android:id="@+id/textViewStatistics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nhấn vào đây để xem thống kê"
