@@ -44,7 +44,7 @@ public class CreateOrderActivity extends AppCompatActivity {
         orderItemsRecyclerView = findViewById(R.id.order_items_recycler_view);
         addButton = findViewById(R.id.add_button);
         addNewItemButton = findViewById(R.id.add_new_item_button);
-        totalTextView = findViewById(R.id.total_text_view);
+        totalTextView = findViewById(R.id.subtotal_text_view);
         discountTextView = findViewById(R.id.discount_text_view);
         subtotalTextView = findViewById(R.id.subtotal_text_view);
         backButton = findViewById(R.id.back_button);

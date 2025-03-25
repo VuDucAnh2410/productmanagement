@@ -87,5 +87,16 @@
                 android:src="@drawable/ic_plus" />
 
             <ImageButton
-                android:id="@
+                android:id="@+id/delete_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_delete" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
 

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/dark_blue"
     android:orientation="horizontal">
 
@@ -18,7 +19,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_customer"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +43,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_product"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,12 +67,12 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_cart"
-            android:tint="@android:color/white" />
+           app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giỏ hàng"
+            android:text="Thống kê"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
@@ -90,7 +91,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_order"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -9,21 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ProductActivity" />
-        <activity android:name=".activities.AddProductActivity" />
-        <activity android:name=".activities.ProductDetailActivity" />
-        <activity android:name=".activities.OrderActivity" />
-        <activity android:name=".activities.CreateOrderActivity" />
-        <activity android:name=".activities.OrderDetailActivity" />
-        <activity android:name=".activities.StatisticsActivity" />
-        <activity android:name=".activities.CartActivity" />
-        <activity android:name=".activities.PaymentActivity" />
+        <activity android:name=".activities.ProductActivity" android:exported="true" />
+        <activity android:name=".activities.AddProductActivity" android:exported="true" />
+        <activity android:name=".activities.ProductDetailActivity" android:exported="true" />
+        <activity android:name=".activities.OrderActivity" android:exported="true" />
+        <activity android:name=".activities.CreateOrderActivity" android:exported="true" />
+        <activity android:name=".activities.OrderDetailActivity" android:exported="true"/>
+        <activity android:name=".activities.StatisticsActivity" android:exported="true"/>
+        <activity android:name=".activities.CartActivity" android:exported="true"/>
+        <activity android:name=".activities.PaymentActivity" android:exported="true"/>
     </application>
 
 </manifest>

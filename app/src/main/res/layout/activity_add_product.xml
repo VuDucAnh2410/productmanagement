@@ -51,6 +51,7 @@
                     android:drawableTop="@drawable/ic_upload"
                     android:gravity="center"
                     android:text="Tải ảnh sản phẩm lên"
+                    android:layout_marginTop="20dp"
                     android:textColor="@android:color/darker_gray" />
 
             </FrameLayout>
@@ -60,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:hint="Nhập mã sản phẩm"
                 android:padding="12dp" />
 
@@ -69,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:hint="Nhập tên sản phẩm"
                 android:padding="12dp" />
 
@@ -78,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:hint="Nhập giá vốn sản phẩm"
                 android:inputType="numberDecimal"
                 android:padding="12dp" />
@@ -88,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:hint="Nhập giá bán sản phẩm"
                 android:inputType="numberDecimal"
                 android:padding="12dp" />
@@ -98,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:hint="Nhập tình trạng sản phẩm"
                 android:padding="12dp" />
 
@@ -115,7 +116,7 @@
                 android:id="@+id/product_description_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/rounder_edittext"
                 android:gravity="top"
                 android:hint="Nhập mô tả sản phẩm"
                 android:inputType="textMultiLine"

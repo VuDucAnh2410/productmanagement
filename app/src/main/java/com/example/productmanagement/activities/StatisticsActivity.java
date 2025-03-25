@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class StatisticsActivity extends AppCompatActivity {
         todayButton = findViewById(R.id.today_button);
         weekButton = findViewById(R.id.week_button);
         monthButton = findViewById(R.id.month_button);
-        calendarButton = findViewById(R.id.calendar_button);
+        ImageButton calendarButton = findViewById(R.id.calendar_button);
         totalOrdersTextView = findViewById(R.id.total_orders_text_view);
         abandonmentRateTextView = findViewById(R.id.abandonment_rate_text_view);
         potentialRevenueTextView = findViewById(R.id.potential_revenue_text_view);
