@@ -24,6 +24,7 @@ import java.util.List;
 public class PaymentActivity extends AppCompatActivity {
 
     private TextView customerNameTextView, customerPhoneTextView, customerAddressTextView, totalTextView;
+    private TextView orderIdTextView;
     private RecyclerView orderItemsRecyclerView;
     private Button printInvoiceButton;
     private ImageButton backButton;
@@ -32,6 +33,8 @@ public class PaymentActivity extends AppCompatActivity {
     private RadioButton cashRadioButton, bankTransferRadioButton;
     private OrderItemAdapter adapter;
     private List<OrderItem> orderItems;
+    private String orderId;
+    private double orderTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class PaymentActivity extends AppCompatActivity {
         customerPhoneTextView = findViewById(R.id.customer_phone_text_view);
         customerAddressTextView = findViewById(R.id.customer_address_text_view);
         totalTextView = findViewById(R.id.total_text_view);
+        orderIdTextView = findViewById(R.id.order_id_text_view);
         orderItemsRecyclerView = findViewById(R.id.order_items_recycler_view);
         printInvoiceButton = findViewById(R.id.print_invoice_button);
         backButton = findViewById(R.id.back_button);
@@ -51,24 +55,34 @@ public class PaymentActivity extends AppCompatActivity {
         cashRadioButton = findViewById(R.id.cash_radio_button);
         bankTransferRadioButton = findViewById(R.id.bank_transfer_radio_button);
 
+        // Lấy thông tin đơn hàng từ Intent
+        if (getIntent().hasExtra("order_id")) {
+            orderId = getIntent().getStringExtra("order_id");
+            orderTotal = getIntent().getDoubleExtra("order_total", 0);
+
+            // Hiển thị mã đơn hàng
+            if (orderIdTextView != null) {
+                orderIdTextView.setText(orderId);
+            }
+
+            // Hiển thị tổng tiền
+            totalTextView.setText(String.format("%,.0f đ", orderTotal));
+        }
+
         // Thiết lập RecyclerView
         orderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         // Tạo dữ liệu mẫu
         orderItems = createSampleOrderItems();
-        
-        // Thiết lập adapter
-        adapter = new OrderItemAdapter(this, orderItems);
+
+        // Thiết lập adapter với readOnly = true để bỏ phần chỉnh số lượng và xóa sản phẩm
+        adapter = new OrderItemAdapter(this, orderItems, true);
         orderItemsRecyclerView.setAdapter(adapter);
 
         // Thiết lập dữ liệu khách hàng
         customerNameTextView.setText("Trần Văn Sướng");
         customerPhoneTextView.setText("0984357636");
         customerAddressTextView.setText("293/1 Tôn Đản quận 4");
-
-        // Tính tổng tiền
-        double total = calculateTotal();
-        totalTextView.setText(String.format("%,.0f đ", total));
 
         // Thiết lập sự kiện click cho nút quay lại
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -105,25 +119,17 @@ public class PaymentActivity extends AppCompatActivity {
 
     private List<OrderItem> createSampleOrderItems() {
         List<OrderItem> items = new ArrayList<>();
-        
+
         // Thêm dữ liệu mẫu
-        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser", 
+        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser",
                 150000, 350000, 120, "Skincare", "");
         items.add(new OrderItem(product1, 4));
-        
-        Product product2 = new Product("SP004", "Kem Dưỡng Ẩm La Roche-Posay Cicaplast Baume B5", 
+
+        Product product2 = new Product("SP004", "Kem Dưỡng Ẩm La Roche-Posay Cicaplast Baume B5",
                 220000, 450000, 275, "Skincare", "");
         items.add(new OrderItem(product2, 1));
-        
-        return items;
-    }
 
-    private double calculateTotal() {
-        double total = 0;
-        for (OrderItem item : orderItems) {
-            total += item.getProduct().getSellingPrice() * item.getQuantity();
-        }
-        return total;
+        return items;
     }
 }
 

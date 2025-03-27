@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.productmanagement.R;
 import com.example.productmanagement.activities.OrderDetailActivity;
+import com.example.productmanagement.activities.PaymentActivity;
 import com.example.productmanagement.models.Order;
 
 import java.util.List;
@@ -37,12 +38,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
-        
+
         holder.orderIdTextView.setText(order.getId());
         holder.totalTextView.setText(String.format("%,.0f", order.getTotal()));
         holder.dateTextView.setText(order.getDate());
         holder.statusTextView.setText(order.getStatus());
-        
+
         // Thiết lập màu sắc cho trạng thái
         if ("Chưa xác nhận".equals(order.getStatus())) {
             holder.statusTextView.setTextColor(context.getResources().getColor(R.color.status_pending));
@@ -53,8 +54,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         } else if ("Hủy đơn".equals(order.getStatus())) {
             holder.statusTextView.setTextColor(context.getResources().getColor(R.color.status_cancelled));
         }
-        
-        // Thiết lập sự kiện click cho item
+
+        // Thiết lập sự kiện click cho mã đơn hàng để chuyển đến trang thanh toán
+        holder.orderIdTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PaymentActivity.class);
+                intent.putExtra("order_id", order.getId());
+                intent.putExtra("order_total", order.getTotal());
+                context.startActivity(intent);
+            }
+        });
+
+        // Thiết lập sự kiện click cho item (ngoại trừ mã đơn hàng) để xem chi tiết đơn hàng
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +75,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 context.startActivity(intent);
             }
         });
-        
+
         // Thiết lập sự kiện click cho nút chỉnh sửa
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +94,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public class OrderViewHolder extends RecyclerView.ViewHolder {
-        
+
         TextView orderIdTextView, totalTextView, dateTextView, statusTextView;
         ImageButton editButton;
-        
+
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            
+
             orderIdTextView = itemView.findViewById(R.id.order_id_text_view);
             totalTextView = itemView.findViewById(R.id.total_text_view);
             dateTextView = itemView.findViewById(R.id.date_text_view);

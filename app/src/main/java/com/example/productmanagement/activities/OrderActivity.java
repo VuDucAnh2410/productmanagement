@@ -3,12 +3,16 @@ package com.example.productmanagement.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +38,8 @@ public class OrderActivity extends AppCompatActivity {
     private Calendar calendar;
     private LinearLayout customerLayout, productLayout, cartLayout, orderLayout;
 
+    private static final String TAG = "OrderActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +51,7 @@ public class OrderActivity extends AppCompatActivity {
         toDateEditText = findViewById(R.id.to_date_edit_text);
         orderRecyclerView = findViewById(R.id.order_recycler_view);
         createOrderButton = findViewById(R.id.create_order_button);
-        
+
         customerLayout = findViewById(R.id.customer_layout);
         productLayout = findViewById(R.id.product_layout);
         cartLayout = findViewById(R.id.cart_layout);
@@ -56,10 +62,10 @@ public class OrderActivity extends AppCompatActivity {
 
         // Thiết lập RecyclerView
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         // Tạo dữ liệu mẫu
         orderList = createSampleOrders();
-        
+
         // Thiết lập adapter
         adapter = new OrderAdapter(this, orderList);
         orderRecyclerView.setAdapter(adapter);
@@ -68,11 +74,35 @@ public class OrderActivity extends AppCompatActivity {
         setupDatePickers();
 
         // Thiết lập sự kiện click cho nút tạo đơn hàng
-        createOrderButton.setOnClickListener(new View.OnClickListener() {
+        if (createOrderButton != null) {
+            createOrderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(OrderActivity.this, CreateOrderActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(OrderActivity.this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            Log.e(TAG, "createOrderButton là null");
+        }
+
+        // Thiết lập sự kiện tìm kiếm
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrderActivity.this, CreateOrderActivity.class);
-                startActivity(intent);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterOrders(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -80,9 +110,22 @@ public class OrderActivity extends AppCompatActivity {
         setupBottomNavigation();
     }
 
+    private void filterOrders(String query) {
+        List<Order> filteredList = new ArrayList<>();
+
+        for (Order order : createSampleOrders()) {
+            if (order.getId().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(order);
+            }
+        }
+
+        adapter = new OrderAdapter(this, filteredList);
+        orderRecyclerView.setAdapter(adapter);
+    }
+
     private List<Order> createSampleOrders() {
         List<Order> orders = new ArrayList<>();
-        
+
         // Thêm dữ liệu mẫu
         orders.add(new Order("DH212384", 999999999, "22/05/23", "Chưa xác nhận"));
         orders.add(new Order("DH212385", 888888888, "22/05/23", "Xác nhận"));
@@ -93,18 +136,18 @@ public class OrderActivity extends AppCompatActivity {
         orders.add(new Order("DH212390", 333333333, "22/05/23", "Chưa xác nhận"));
         orders.add(new Order("DH212391", 222222222, "22/05/23", "Hủy đơn"));
         orders.add(new Order("DH212392", 111111111, "22/05/23", "Hủy đơn"));
-        
+
         return orders;
     }
 
     private void setupDatePickers() {
         // Định dạng ngày tháng
         final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        
+
         // Thiết lập giá trị mặc định cho các trường ngày tháng
         fromDateEditText.setText(dateFormat.format(calendar.getTime()));
         toDateEditText.setText(dateFormat.format(calendar.getTime()));
-        
+
         // Thiết lập sự kiện click cho trường ngày bắt đầu
         fromDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +155,7 @@ public class OrderActivity extends AppCompatActivity {
                 showDatePickerDialog(fromDateEditText);
             }
         });
-        
+
         // Thiết lập sự kiện click cho trường ngày kết thúc
         toDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +172,12 @@ public class OrderActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 dateEditText.setText(dateFormat.format(calendar.getTime()));
             }
         };
-        
+
         new DatePickerDialog(
                 OrderActivity.this,
                 dateSetListener,

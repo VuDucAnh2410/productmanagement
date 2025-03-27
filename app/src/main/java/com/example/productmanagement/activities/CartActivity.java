@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.productmanagement.R;
+import com.example.productmanagement.activities.customer.CustomerListActivity;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -51,7 +52,9 @@ public class CartActivity extends AppCompatActivity {
         customerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Xử lý khi nhấn vào Khách hàng
+                Intent intent = new Intent(CartActivity.this, CustomerListActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

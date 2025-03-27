@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +25,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     private EditText customerNameEditText, customerPhoneEditText, customerEmailEditText, customerAddressEditText;
     private RecyclerView orderItemsRecyclerView;
     private Button addButton, addNewItemButton;
-    private TextView totalTextView, discountTextView, subtotalTextView;
+    private TextView subtotalTextView, discountTextView, totalTextView;
     private ImageButton backButton;
     private OrderItemAdapter adapter;
     private List<OrderItem> orderItems;
@@ -44,17 +43,17 @@ public class CreateOrderActivity extends AppCompatActivity {
         orderItemsRecyclerView = findViewById(R.id.order_items_recycler_view);
         addButton = findViewById(R.id.add_button);
         addNewItemButton = findViewById(R.id.add_new_item_button);
-        totalTextView = findViewById(R.id.subtotal_text_view);
-        discountTextView = findViewById(R.id.discount_text_view);
         subtotalTextView = findViewById(R.id.subtotal_text_view);
+        discountTextView = findViewById(R.id.discount_text_view);
+        totalTextView = findViewById(R.id.total_text_view);
         backButton = findViewById(R.id.back_button);
 
         // Thiết lập RecyclerView
         orderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         // Tạo dữ liệu mẫu
         orderItems = createSampleOrderItems();
-        
+
         // Thiết lập adapter
         adapter = new OrderItemAdapter(this, orderItems);
         orderItemsRecyclerView.setAdapter(adapter);
@@ -79,8 +78,29 @@ public class CreateOrderActivity extends AppCompatActivity {
         addNewItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Trong thực tế, bạn sẽ mở màn hình chọn sản phẩm
-                Toast.makeText(CreateOrderActivity.this, "Chức năng thêm sản phẩm mới", Toast.LENGTH_SHORT).show();
+                // Thêm một sản phẩm tương tự vào danh sách
+                if (!orderItems.isEmpty()) {
+                    // Lấy sản phẩm đầu tiên làm mẫu
+                    Product sampleProduct = orderItems.get(0).getProduct();
+                    // Tạo một sản phẩm mới với thông tin tương tự
+                    Product newProduct = new Product(
+                            sampleProduct.getCode(),
+                            sampleProduct.getName(),
+                            sampleProduct.getCostPrice(),
+                            sampleProduct.getSellingPrice(),
+                            sampleProduct.getStock(),
+                            sampleProduct.getCategory(),
+                            sampleProduct.getDescription()
+                    );
+                    // Thêm vào danh sách với số lượng là 1
+                    orderItems.add(new OrderItem(newProduct, 1));
+                    // Cập nhật adapter
+                    adapter.notifyDataSetChanged();
+                    // Cập nhật tổng tiền
+                    updateTotal();
+                    // Thông báo
+                    Toast.makeText(CreateOrderActivity.this, "Đã thêm sản phẩm mới", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -90,12 +110,12 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     private List<OrderItem> createSampleOrderItems() {
         List<OrderItem> items = new ArrayList<>();
-        
+
         // Thêm dữ liệu mẫu
-        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser", 
+        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser",
                 150000, 350000, 120, "Skincare", "");
         items.add(new OrderItem(product1, 1));
-        
+
         return items;
     }
 
@@ -104,10 +124,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         for (OrderItem item : orderItems) {
             subtotal += item.getProduct().getSellingPrice() * item.getQuantity();
         }
-        
+
         double discount = 0; // Trong thực tế, bạn sẽ tính chiết khấu dựa trên quy tắc kinh doanh
         double total = subtotal - discount;
-        
+
         subtotalTextView.setText(String.format("%,.0f đ", subtotal));
         discountTextView.setText(String.format("%,.0f đ", discount));
         totalTextView.setText(String.format("%,.0f đ", total));

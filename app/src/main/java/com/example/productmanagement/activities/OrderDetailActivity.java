@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public class OrderDetailActivity extends AppCompatActivity {
 
     private TextView orderIdTextView, orderDateTextView, customerNameTextView, customerPhoneTextView,
-                     itemCountTextView, totalTextView, statusTextView, waitingTimeTextView;
+            itemCountTextView, totalTextView, statusTextView, waitingTimeTextView;
     private RecyclerView orderItemsRecyclerView;
     private Button deleteButton, saveButton;
     private ImageButton backButton;
@@ -51,24 +52,58 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         // Thiết lập RecyclerView
         orderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         // Lấy dữ liệu đơn hàng từ Intent
         if (getIntent().hasExtra("order_id")) {
             String orderId = getIntent().getStringExtra("order_id");
-            
+
             // Trong thực tế, bạn sẽ truy vấn cơ sở dữ liệu để lấy thông tin đơn hàng
             // Đối với ứng dụng mẫu này, chúng ta sẽ tạo dữ liệu mẫu
             Order order = getSampleOrder(orderId);
             orderItems = getSampleOrderItems();
-            
+
             if (order != null) {
                 displayOrderDetails(order);
             }
         }
-        
+
         // Thiết lập adapter
         adapter = new OrderItemAdapter(this, orderItems);
         orderItemsRecyclerView.setAdapter(adapter);
+
+        // Thêm nút thêm sản phẩm mới vào OrderDetailActivity
+        Button addNewItemButton = findViewById(R.id.add_new_item_button);
+        if (addNewItemButton != null) {
+            // Thiết lập sự kiện click cho nút thêm sản phẩm mới
+            addNewItemButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Thêm một sản phẩm tương tự vào danh sách
+                    if (!orderItems.isEmpty()) {
+                        // Lấy sản phẩm đầu tiên làm mẫu
+                        Product sampleProduct = orderItems.get(0).getProduct();
+                        // Tạo một sản phẩm mới với thông tin tương tự
+                        Product newProduct = new Product(
+                                sampleProduct.getCode(),
+                                sampleProduct.getName(),
+                                sampleProduct.getCostPrice(),
+                                sampleProduct.getSellingPrice(),
+                                sampleProduct.getStock(),
+                                sampleProduct.getCategory(),
+                                sampleProduct.getDescription()
+                        );
+                        // Thêm vào danh sách với số lượng là 1
+                        orderItems.add(new OrderItem(newProduct, 1));
+                        // Cập nhật adapter
+                        adapter.notifyDataSetChanged();
+                        // Cập nhật số lượng sản phẩm hiển thị
+                        itemCountTextView.setText(orderItems.size() + " Sản phẩm");
+                        // Thông báo
+                        Toast.makeText(OrderDetailActivity.this, "Đã thêm sản phẩm mới", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
 
         // Thiết lập sự kiện click cho nút quay lại
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -109,16 +144,16 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private List<OrderItem> getSampleOrderItems() {
         List<OrderItem> items = new ArrayList<>();
-        
+
         // Thêm dữ liệu mẫu
-        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser", 
+        Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser",
                 150000, 350000, 120, "Skincare", "");
         items.add(new OrderItem(product1, 4));
-        
-        Product product2 = new Product("SP004", "Kem Dưỡng Ẩm La Roche-Posay Cicaplast Baume B5", 
+
+        Product product2 = new Product("SP004", "Kem Dưỡng Ẩm La Roche-Posay Cicaplast Baume B5",
                 220000, 450000, 275, "Skincare", "");
         items.add(new OrderItem(product2, 1));
-        
+
         return items;
     }
 
@@ -128,7 +163,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderDateTextView.setText(order.getDate());
         customerNameTextView.setText("Phạm Nhật Vượng");
         customerPhoneTextView.setText("0931926260");
-        itemCountTextView.setText("5 Sản phẩm");
+        itemCountTextView.setText(orderItems.size() + " Sản phẩm");
         totalTextView.setText(formatPrice(order.getTotal()) + " đ");
         statusTextView.setText(order.getStatus());
         waitingTimeTextView.setText("2 ngày 4 giờ");

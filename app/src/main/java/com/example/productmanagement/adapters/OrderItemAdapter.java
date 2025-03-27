@@ -20,10 +20,18 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
 
     private Context context;
     private List<OrderItem> orderItemList;
+    private boolean readOnly = false; // Thêm biến để kiểm soát chế độ chỉ đọc
 
     public OrderItemAdapter(Context context, List<OrderItem> orderItemList) {
         this.context = context;
         this.orderItemList = orderItemList;
+    }
+
+    // Constructor mới với tham số readOnly
+    public OrderItemAdapter(Context context, List<OrderItem> orderItemList, boolean readOnly) {
+        this.context = context;
+        this.orderItemList = orderItemList;
+        this.readOnly = readOnly;
     }
 
     @NonNull
@@ -36,45 +44,56 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         OrderItem orderItem = orderItemList.get(position);
-        
+
         holder.productNameTextView.setText(orderItem.getProduct().getName());
         holder.categoryTextView.setText(orderItem.getProduct().getCategory());
         holder.priceTextView.setText(String.format("%,.0f đ", orderItem.getProduct().getSellingPrice()));
         holder.quantityTextView.setText(String.valueOf(orderItem.getQuantity()));
-        
+
         // Trong thực tế, bạn sẽ tải ảnh sản phẩm từ URL hoặc tài nguyên
         holder.productImageView.setImageResource(R.drawable.product_placeholder);
-        
-        // Thiết lập sự kiện click cho nút giảm số lượng
-        holder.decreaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantity = orderItem.getQuantity();
-                if (quantity > 1) {
-                    orderItem.setQuantity(quantity - 1);
+
+        // Ẩn các nút điều chỉnh số lượng và xóa nếu ở chế độ chỉ đọc
+        if (readOnly) {
+            holder.decreaseButton.setVisibility(View.GONE);
+            holder.increaseButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+        } else {
+            holder.decreaseButton.setVisibility(View.VISIBLE);
+            holder.increaseButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+
+            // Thiết lập sự kiện click cho nút giảm số lượng
+            holder.decreaseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quantity = orderItem.getQuantity();
+                    if (quantity > 1) {
+                        orderItem.setQuantity(quantity - 1);
+                        notifyItemChanged(position);
+                    }
+                }
+            });
+
+            // Thiết lập sự kiện click cho nút tăng số lượng
+            holder.increaseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quantity = orderItem.getQuantity();
+                    orderItem.setQuantity(quantity + 1);
                     notifyItemChanged(position);
                 }
-            }
-        });
-        
-        // Thiết lập sự kiện click cho nút tăng số lượng
-        holder.increaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantity = orderItem.getQuantity();
-                orderItem.setQuantity(quantity + 1);
-                notifyItemChanged(position);
-            }
-        });
-        
-        // Thiết lập sự kiện click cho nút xóa
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                orderItemList.remove(position);
-                notifyDataSetChanged();
-            }
-        });
+            });
+
+            // Thiết lập sự kiện click cho nút xóa
+            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    orderItemList.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     @Override
@@ -83,14 +102,14 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     }
 
     public class OrderItemViewHolder extends RecyclerView.ViewHolder {
-        
+
         ImageView productImageView;
         TextView productNameTextView, categoryTextView, priceTextView, quantityTextView;
         ImageButton decreaseButton, increaseButton, deleteButton;
-        
+
         public OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            
+
             productImageView = itemView.findViewById(R.id.product_image_view);
             productNameTextView = itemView.findViewById(R.id.product_name_text_view);
             categoryTextView = itemView.findViewById(R.id.category_text_view);
