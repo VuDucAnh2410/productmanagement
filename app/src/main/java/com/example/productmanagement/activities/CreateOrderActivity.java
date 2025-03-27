@@ -25,7 +25,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     private EditText customerNameEditText, customerPhoneEditText, customerEmailEditText, customerAddressEditText;
     private RecyclerView orderItemsRecyclerView;
     private Button addButton, addNewItemButton;
-    private TextView subtotalTextView, discountTextView, totalTextView;
+    private TextView subtotalTextView, discountTextView;
     private ImageButton backButton;
     private OrderItemAdapter adapter;
     private List<OrderItem> orderItems;
@@ -45,8 +45,7 @@ public class CreateOrderActivity extends AppCompatActivity {
         addNewItemButton = findViewById(R.id.add_new_item_button);
         subtotalTextView = findViewById(R.id.subtotal_text_view);
         discountTextView = findViewById(R.id.discount_text_view);
-        totalTextView = findViewById(R.id.total_text_view);
-        backButton = findViewById(R.id.back_button);
+        backButton = findViewById(R.id.back_button); // Nếu ID này tồn tại trong XML
 
         // Thiết lập RecyclerView
         orderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -59,48 +58,34 @@ public class CreateOrderActivity extends AppCompatActivity {
         orderItemsRecyclerView.setAdapter(adapter);
 
         // Thiết lập sự kiện click cho nút quay lại
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
         // Thiết lập sự kiện click cho nút thêm
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveOrder();
-            }
-        });
+        addButton.setOnClickListener(v -> saveOrder());
 
         // Thiết lập sự kiện click cho nút thêm sản phẩm mới
-        addNewItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Thêm một sản phẩm tương tự vào danh sách
-                if (!orderItems.isEmpty()) {
-                    // Lấy sản phẩm đầu tiên làm mẫu
-                    Product sampleProduct = orderItems.get(0).getProduct();
-                    // Tạo một sản phẩm mới với thông tin tương tự
-                    Product newProduct = new Product(
-                            sampleProduct.getCode(),
-                            sampleProduct.getName(),
-                            sampleProduct.getCostPrice(),
-                            sampleProduct.getSellingPrice(),
-                            sampleProduct.getStock(),
-                            sampleProduct.getCategory(),
-                            sampleProduct.getDescription()
-                    );
-                    // Thêm vào danh sách với số lượng là 1
-                    orderItems.add(new OrderItem(newProduct, 1));
-                    // Cập nhật adapter
-                    adapter.notifyDataSetChanged();
-                    // Cập nhật tổng tiền
-                    updateTotal();
-                    // Thông báo
-                    Toast.makeText(CreateOrderActivity.this, "Đã thêm sản phẩm mới", Toast.LENGTH_SHORT).show();
-                }
+        addNewItemButton.setOnClickListener(v -> {
+            if (!orderItems.isEmpty()) {
+                // Lấy sản phẩm đầu tiên làm mẫu
+                Product sampleProduct = orderItems.get(0).getProduct();
+                // Tạo một sản phẩm mới với thông tin tương tự
+                Product newProduct = new Product(
+                        sampleProduct.getCode(),
+                        sampleProduct.getName(),
+                        sampleProduct.getCostPrice(),
+                        sampleProduct.getSellingPrice(),
+                        sampleProduct.getStock(),
+                        sampleProduct.getCategory(),
+                        sampleProduct.getDescription()
+                );
+                // Thêm vào danh sách với số lượng là 1
+                orderItems.add(new OrderItem(newProduct, 1));
+                // Cập nhật adapter
+                adapter.notifyDataSetChanged();
+                // Cập nhật tổng tiền
+                updateTotal();
+                // Thông báo
+                Toast.makeText(CreateOrderActivity.this, "Đã thêm sản phẩm mới", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -110,12 +95,10 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     private List<OrderItem> createSampleOrderItems() {
         List<OrderItem> items = new ArrayList<>();
-
         // Thêm dữ liệu mẫu
         Product product1 = new Product("SP001", "Sữa Rửa Mặt CeraVe Foaming Facial Cleanser",
                 150000, 350000, 120, "Skincare", "");
         items.add(new OrderItem(product1, 1));
-
         return items;
     }
 
@@ -125,12 +108,13 @@ public class CreateOrderActivity extends AppCompatActivity {
             subtotal += item.getProduct().getSellingPrice() * item.getQuantity();
         }
 
-        double discount = 0; // Trong thực tế, bạn sẽ tính chiết khấu dựa trên quy tắc kinh doanh
+        double discount = 0; // Có thể tính chiết khấu tùy theo quy tắc kinh doanh
         double total = subtotal - discount;
 
         subtotalTextView.setText(String.format("%,.0f đ", subtotal));
         discountTextView.setText(String.format("%,.0f đ", discount));
-        totalTextView.setText(String.format("%,.0f đ", total));
+        // Cập nhật tổng tiền nếu cần thiết
+        // totalTextView.setText(String.format("%,.0f đ", total)); // Nếu bạn có trường tổng tiền
     }
 
     private void saveOrder() {
@@ -150,10 +134,8 @@ public class CreateOrderActivity extends AppCompatActivity {
             return;
         }
 
-        // Trong thực tế, bạn sẽ lưu đơn hàng vào cơ sở dữ liệu ở đây
-        // Đối với ứng dụng mẫu này, chúng ta chỉ hiển thị thông báo thành công
+        // Thông báo thành công
         Toast.makeText(this, "Đã tạo đơn hàng thành công", Toast.LENGTH_SHORT).show();
         finish();
     }
 }
-
