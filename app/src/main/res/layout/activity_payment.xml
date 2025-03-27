@@ -48,6 +48,29 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Thêm TextView hiển thị mã đơn hàng -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mã đơn hàng: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_id_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DH212384"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -245,4 +268,3 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
