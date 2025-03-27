@@ -13,6 +13,7 @@ import com.example.productmanagement.activities.OrderActivity;
 import com.example.productmanagement.activities.ProductActivity;
 import com.example.productmanagement.activities.StatisticsActivity;
 import com.example.productmanagement.activities.CartActivity;
+import com.example.productmanagement.activities.customer.CustomerListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         customerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Xử lý khi nhấn vào Khách hàng
-                // Tạm thời chưa có màn hình này
+                // Chuyển đến màn hình Quản lý khách hàng
+                Intent intent = new Intent(MainActivity.this, CustomerListActivity.class);
+                startActivity(intent);
             }
         });
 

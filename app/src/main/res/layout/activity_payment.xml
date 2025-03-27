@@ -213,6 +213,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="true"
+                    app:tint="@color/dark_blue"
                     android:drawableStart="@drawable/ic_money"
                     android:drawablePadding="8dp"
                     android:padding="8dp"

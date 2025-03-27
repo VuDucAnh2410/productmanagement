@@ -27,6 +27,9 @@
         <activity android:name=".activities.StatisticsActivity" android:exported="true"/>
         <activity android:name=".activities.CartActivity" android:exported="true"/>
         <activity android:name=".activities.PaymentActivity" android:exported="true"/>
+        <activity android:name=".activities.customer.CustomerListActivity" android:exported="true" />
+        <activity android:name=".activities.customer.CustomerDetailActivity" android:exported="true" />
+        <activity android:name=".activities.customer.CustomerAddActivity" android:exported="true" />
     </application>
 
 </manifest>

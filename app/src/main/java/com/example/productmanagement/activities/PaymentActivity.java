@@ -24,7 +24,11 @@ import java.util.List;
 public class PaymentActivity extends AppCompatActivity {
 
     private TextView customerNameTextView, customerPhoneTextView, customerAddressTextView, totalTextView;
+
+    private TextView orderIdTextView;
+
     private TextView orderIdTextView; // Thêm TextView để hiển thị mã đơn hàng
+
     private RecyclerView orderItemsRecyclerView;
     private Button printInvoiceButton;
     private ImageButton backButton;
@@ -33,8 +37,13 @@ public class PaymentActivity extends AppCompatActivity {
     private RadioButton cashRadioButton, bankTransferRadioButton;
     private OrderItemAdapter adapter;
     private List<OrderItem> orderItems;
+
+    private String orderId;
+    private double orderTotal;
+
     private String orderId; // Biến để lưu mã đơn hàng
     private double orderTotal; // Biến để lưu tổng tiền đơn hàng
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +55,11 @@ public class PaymentActivity extends AppCompatActivity {
         customerPhoneTextView = findViewById(R.id.customer_phone_text_view);
         customerAddressTextView = findViewById(R.id.customer_address_text_view);
         totalTextView = findViewById(R.id.total_text_view);
+
+        orderIdTextView = findViewById(R.id.order_id_text_view);
+
         orderIdTextView = findViewById(R.id.order_id_text_view); // Tìm TextView mã đơn hàng
+
         orderItemsRecyclerView = findViewById(R.id.order_items_recycler_view);
         printInvoiceButton = findViewById(R.id.print_invoice_button);
         backButton = findViewById(R.id.back_button);
@@ -75,8 +88,13 @@ public class PaymentActivity extends AppCompatActivity {
         // Tạo dữ liệu mẫu
         orderItems = createSampleOrderItems();
 
+
+        // Thiết lập adapter với readOnly = true để bỏ phần chỉnh số lượng và xóa sản phẩm
+        adapter = new OrderItemAdapter(this, orderItems, true);
+
         // Thiết lập adapter
         adapter = new OrderItemAdapter(this, orderItems);
+
         orderItemsRecyclerView.setAdapter(adapter);
 
         // Thiết lập dữ liệu khách hàng
